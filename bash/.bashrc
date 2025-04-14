@@ -173,3 +173,6 @@ function vdf() {
 eval "$(starship init bash)"
 
 
+export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+
+
