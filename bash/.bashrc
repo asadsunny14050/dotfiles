@@ -1,6 +1,6 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
+#void for examples
 
 # If not running interactively, don't do anything
 case $- in
@@ -117,18 +117,18 @@ if ! shopt -oq posix; then
 fi
 
 # Setup fzf keybindings and fuzzy completion
-eval "$(fzf --bash)"
+# eval "$(fzf --bash)"
 
 alias goHome="cd ~"
 alias goBase="cd /mnt/d/Coding"
 alias goBashConfig="nvim ~/.bashrc"
 alias goNvimConfig="cd ~/.config/nvim"
 alias ls=eza 
-alias cat=batcat
+alias peek=peekaboo
+# alias cat=batcat
 alias inv='nvim $(fzf --preview="batcat --color=always {}")'
 alias vim=nvim
-
-EDITOR='nvim'
+alias fman="compgen -c | fzf | xargs man"
 
 export FZF_DEFAULT_COMMAND='rg --files --hidden --no-ignore-vcs --glob "!{node_modules/*,.git/*}"'
 export PATH="/usr/local/bin:$PATH"
@@ -174,5 +174,7 @@ eval "$(starship init bash)"
 
 
 export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+export PATH="$PATH:/mnt/d/Coding/C/peekaboo-my-ls"
 
+export NODE_COMPILE_CACHE=~/.cache/nodejs-compile-cache
 

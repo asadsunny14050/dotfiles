@@ -76,3 +76,11 @@ vim.api.nvim_set_keymap(
     { noremap = true, silent = true }
 )
 -- vim.api.nvim_set_keymap("i", "<Esc>[80kb", "<C-W>", { noremap = true, silent = true })
+--
+vim.keymap.set("n", "<leader>d", function()
+    vim.diagnostic.setqflist()
+    vim.cmd("copen")
+end, { desc = "Show all diagnostics in quickfix list" })
+
+vim.keymap.set("n", "j", "gj", { noremap = true })
+vim.keymap.set("n", "k", "gk", { noremap = true })

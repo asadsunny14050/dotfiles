@@ -4,11 +4,18 @@ return {
         config = function()
                 require("lualine").setup({
                         options = {
+                                icons_enabled = true,
                                 theme = "nightfly",
                                 globalstatus = true,
                         },
                         sections = {
                                 lualine_c = {
+                                        {
+                                                "filetype",
+                                                icon_only = true,
+                                                separator = "",
+                                                padding = { left = 1, right = 0 }, -- optional: reduce spacing
+                                        },
                                         {
                                                 "filename",
                                                 file_status = true, -- displays file status (readonly status, modified status)
