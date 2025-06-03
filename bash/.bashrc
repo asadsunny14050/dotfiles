@@ -119,15 +119,18 @@ fi
 # Setup fzf keybindings and fuzzy completion
 # eval "$(fzf --bash)"
 
-alias goHome="cd ~"
-alias goBase="cd /mnt/d/Coding"
-alias goBashConfig="nvim ~/.bashrc"
-alias goNvimConfig="cd ~/.config/nvim"
+alias gohome="cd ~"
+alias gobase="cd /mnt/d/Coding"
+alias gobashconfig="nvim ~/.bashrc"
+alias gotmuxconfig="nvim ~/.tmux.conf"
+alias gonvimconfig="cd ~/.config/nvim"
 alias ls=eza 
 alias peek=peekaboo
-# alias cat=batcat
+alias cat=batcat
 alias inv='nvim $(fzf --preview="batcat --color=always {}")'
 alias vim=nvim
+alias vi=nvim
+alias v=nvim
 alias fman="compgen -c | fzf | xargs man"
 
 export FZF_DEFAULT_COMMAND='rg --files --hidden --no-ignore-vcs --glob "!{node_modules/*,.git/*}"'
@@ -178,3 +181,10 @@ export PATH="$PATH:/mnt/d/Coding/C/peekaboo-my-ls"
 
 export NODE_COMPILE_CACHE=~/.cache/nodejs-compile-cache
 
+set -o vi
+
+PS1='\n\u@\h:\w\$ '
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
