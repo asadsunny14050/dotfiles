@@ -1,5 +1,14 @@
 require("asadsunny")
 
+vim.api.nvim_create_autocmd("VimEnter", {
+    callback = function()
+        local stat = vim.loop.fs_stat(vim.fn.argv(0))
+        if stat and stat.type == "directory" then
+            -- open Oil on the directory you started Neovim with
+            require("oil").open()
+        end
+    end,
+})
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then

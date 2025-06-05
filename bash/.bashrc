@@ -125,6 +125,7 @@ alias gobashconfig="nvim ~/.bashrc"
 alias gotmuxconfig="nvim ~/.tmux.conf"
 alias gonvimconfig="cd ~/.config/nvim"
 alias ls=eza 
+alias fd=fdfind
 alias peek=peekaboo
 alias cat=batcat
 alias inv='nvim $(fzf --preview="batcat --color=always {}")'
