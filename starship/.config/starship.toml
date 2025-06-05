@@ -15,7 +15,7 @@ $php\
 $character"""
 
 [directory]
-style = "fg:#ffffff bg:#769ff0"
+style = "fg:#000000 bg:#769ff0"
 format = "[ $path ]($style)"
 truncation_length = 3
 truncation_symbol = "…/"
