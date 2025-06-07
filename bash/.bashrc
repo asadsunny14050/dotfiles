@@ -149,19 +149,41 @@ df() {
 
 
 # Fuzzy search relative to your base folder (e.g., coding-folder)
-function cdf() {
-  local dir
-	    # dir=$( (find /mnt/d/Coding -maxdepth 1 -type d -print; \
-            # find /mnt/d/Coding -mindepth 2 -type d -name node_modules -prune -o -type d -print) \
-            # 2> /dev/null | fzf --preview 'eza -l --color=always {}')
-     # Using fd (a faster alternative to find)
-    dir=$( (fdfind --type d --max-depth 1 . /mnt/d/Coding; \
-            fdfind --type d --exclude node_modules . /mnt/d/Coding) \
-            | fzf --preview 'eza -l --color=always {}')
+cdf() {
+  local dir session
+  dir=$(
+    (
+      fdfind --type d --max-depth 1 . /mnt/d/Coding;
+      fdfind --type d --exclude node_modules . /mnt/d/Coding
+    ) | fzf --preview 'eza -l --color=always {}'
+  )
 
-    [ -n "$dir" ] && cd "$dir"
+  [ -z "$dir" ] && return  # exit if nothing selected
 
+  cd "$dir" || return
+
+  # Get the directory name for session naming
+  session=$(basename "$dir")
+
+  # If not in tmux, launch a new tmux session
+  if [ -z "$TMUX" ]; then
+    if tmux has-session -t "$session" 2>/dev/null; then
+      tmux attach-session -t "$session"
+    else
+      tmux new-session -s "$session"
+    fi
+  else
+    # If already inside tmux, create or switch to session in a new window
+    if tmux has-session -t "$session" 2>/dev/null; then
+      tmux switch-client -t "$session"
+    else
+      tmux new-session -ds "$session"
+      tmux switch-client -t "$session"
+    fi
+  fi
 }
+
+
 
 
 function vdf() {
@@ -189,3 +211,4 @@ PS1='\n\u@\h:\w\$ '
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+export EDITOR=$(which nvim)

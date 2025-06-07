@@ -30,8 +30,27 @@ return {
             lspconfig.lua_ls.setup({
                 capabilities = capabilities,
             })
+
+            require("nvim-navic") -- or let lazy.nvim load it
+
+            local capabilities2 = vim.lsp.protocol.make_client_capabilities()
+            local navic = require("nvim-navic")
             lspconfig.clangd.setup({
-                capabilities = capabilities,
+                capabilities = capabilities2,
+                init_options = {
+                    inlayHints = {
+                        parameterNames = { enabled = "all" },
+                    },
+                },
+                on_attach = function(client, bufnr)
+                    vim.lsp.inlay_hint.enable(true)
+
+                    -- Attach navic if supported
+                    if client.server_capabilities.documentSymbolProvider then
+                        print("i'm running bitch'")
+                        navic.attach(client, bufnr)
+                    end
+                end,
             })
 
             -- Windows fix: Use "typescript-language-server.cmd"

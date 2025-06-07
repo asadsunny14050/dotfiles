@@ -29,7 +29,16 @@ vim.opt.rtp:prepend(lazypath)
 -- Make sure to setup `mapleader` and `maplocalleader` before
 -- loading lazy.nvim so that mappings are correct.
 -- This is also a good place to setup other settings (vim.opt)
+
 vim.g.maplocalleader = "\\"
+
+function _G.navic_winbar()
+    local navic = require("nvim-navic")
+    if navic.is_available() then
+        return navic.get_location()
+    end
+    return ""
+end
 
 -- Setup lazy.nvim
 
@@ -153,4 +162,29 @@ vim.api.nvim_create_user_command("ShellRunPane", function(opts)
         M.run_in_tmux_pane(opts.args)
     end
 end, { nargs = "?", complete = "shellcmd", desc = "Run command in a new tmux pane" })
+
+-- Global state
+_G.inlay_hints_enabled = false
+
+-- Toggle function
+local function toggle_inlay_hints_globally()
+    _G.inlay_hints_enabled = not _G.inlay_hints_enabled
+    vim.lsp.inlay_hint.enable(_G.inlay_hints_enabled)
+    print("Inlay hints " .. (_G.inlay_hints_enabled and "enabled" or "disabled"))
+end
+
+-- Keymap to toggle globally
+vim.keymap.set("n", "<leader>ih", toggle_inlay_hints_globally, { desc = "Toggle Inlay Hints Globally" })
+
+-- Make sure they are OFF by default after LSP attaches
+vim.api.nvim_create_autocmd("LspAttach", {
+    callback = function(args)
+        vim.defer_fn(function()
+            vim.lsp.inlay_hint.enable(false) -- ✅ only takes a boolean
+        end, 100)                   -- Delay to override any LSPs that re-enable them
+    end,
+})
+
+vim.api.nvim_set_hl(0, "LspInlayHint", { link = "Comment" })
+
 return M
