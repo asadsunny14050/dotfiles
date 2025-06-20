@@ -47,7 +47,6 @@ return {
 
                     -- Attach navic if supported
                     if client.server_capabilities.documentSymbolProvider then
-                        print("i'm running bitch'")
                         navic.attach(client, bufnr)
                     end
                 end,
@@ -69,16 +68,16 @@ return {
                     "javascriptreact",
                     "typescript.tsx",
                     "javascript.jsx",
-                },              -- Attach to all types of ts/js files
+                },                          -- Attach to all types of ts/js files
                 single_file_support = true, -- 🔥 Enables LSP for standalone .ts files
                 root_dir = function(fname)
                     -- You can check if a `tsconfig.json` exists in the directory and use that as root
                     return require("lspconfig").util.find_git_ancestor(fname) or
-                    vim.fn.getcwd()                                               -- fallback to current working directory
+                        vim.fn.getcwd() -- fallback to current working directory
                 end,
                 init_options = {
                     preferences = {
-                        disableSuggestions = false, -- Allow autocomplete
+                        disableSuggestions = false,                   -- Allow autocomplete
                         importModuleSpecifierPreference = "relative", -- This is optional
                     },
                 },
@@ -94,13 +93,13 @@ return {
             lspconfig.cssls.setup({
                 capabilities = capabilities,
             })
-            lspconfig.tailwindcss.setup({
-                cmd = {
-                    "/home/asad/.local/share/nvim/mason/packages/tailwindcss-language-server/node_modules/.bin/tailwindcss-language-server",
-                    "--stdio",
-                },
-                capabilities = capabilities,
-            })
+            -- lspconfig.tailwindcss.setup({
+            --     cmd = {
+            --         "/home/asad/.local/share/nvim/mason/packages/tailwindcss-language-server/node_modules/.bin/tailwindcss-language-server",
+            --         "--stdio",
+            --     },
+            --     capabilities = capabilities,
+            -- })
             -- astro --
             lspconfig["astro"].setup({
                 cmd = {

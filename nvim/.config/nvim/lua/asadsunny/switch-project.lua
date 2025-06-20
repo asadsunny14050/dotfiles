@@ -1,6 +1,6 @@
 local M = {}
 
-local Path = "/mnt/d/Coding"
+local Path = "$HOME/coding/"
 
 local function list_projects()
     local fd = vim.fn.executable("fd") == 1 and "fd" or "fdfind"

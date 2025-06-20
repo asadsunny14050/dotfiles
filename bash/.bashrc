@@ -120,7 +120,7 @@ fi
 # eval "$(fzf --bash)"
 
 alias gohome="cd ~"
-alias gobase="cd /mnt/d/Coding"
+alias gobase="cd ~/coding"
 alias gobashconfig="nvim ~/.bashrc"
 alias gotmuxconfig="nvim ~/.tmux.conf"
 alias gonvimconfig="cd ~/.config/nvim"
@@ -153,8 +153,8 @@ cdf() {
   local dir session
   dir=$(
     (
-      fdfind --type d --max-depth 1 . /mnt/d/Coding;
-      fdfind --type d --exclude node_modules . /mnt/d/Coding
+      fdfind --type d --max-depth 1 . ~/coding;
+      fdfind --type d --exclude node_modules . ~/coding
     ) | fzf --preview 'eza -l --color=always {}'
   )
 
@@ -187,10 +187,10 @@ cdf() {
 
 
 function vdf() {
-     # dir=$(find /mnt/d/Coding -type d -name node_modules -prune -o -type d -print 2> /dev/null | fzf  --preview 'eza -l --color=always {}') && cd "$dir" && nvim . 
+     # dir=$(find ~/coding -type d -name node_modules -prune -o -type d -print 2> /dev/null | fzf  --preview 'eza -l --color=always {}') && cd "$dir" && nvim . 
      # using fd
-      dir=$( (find /mnt/d/Coding -maxdepth 1 -type d -print; \
-            find /mnt/d/Coding -mindepth 2 -type d -name node_modules -prune -o -type d -print) \
+      dir=$( (find ~/coding -maxdepth 1 -type d -print; \
+            find ~/coding -mindepth 2 -type d -name node_modules -prune -o -type d -print) \
             2> /dev/null | fzf --preview 'eza -l --color=always {}')
 
     [ -n "$dir" ] && cd "$dir" && nvim .
@@ -200,7 +200,8 @@ eval "$(starship init bash)"
 
 
 export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
-export PATH="$PATH:/mnt/d/Coding/C/peekaboo-my-ls"
+export PATH="$PATH:~/coding/c-programming/peekaboo-my-ls"
+export PATH="$PATH:~/downloads/"
 
 export NODE_COMPILE_CACHE=~/.cache/nodejs-compile-cache
 

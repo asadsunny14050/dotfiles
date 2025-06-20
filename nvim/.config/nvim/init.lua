@@ -44,11 +44,6 @@ end
 
 require("lazy").setup("plugins")
 
--- vim.cmd("colorscheme cyberdream")
-require("netrw").setup({
-    use_devicons = true,
-})
-
 -- File: lua/my_plugins/tmux_runner.lua
 -- Or directly in your init.lua if you prefer
 
