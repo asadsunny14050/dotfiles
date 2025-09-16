@@ -12,7 +12,7 @@ return {
         "williamboman/mason-lspconfig.nvim",
         config = function()
             require("mason-lspconfig").setup({
-                ensure_installed = { "lua_ls", "ts_ls", "html", "cssls", "tailwindcss", "clangd" },
+                ensure_installed = { "lua_ls", "ts_ls", "html", "cssls", "clangd", "tailwindcss" },
                 -- auto-install configured servers (with lspconfig)
                 automatic_installation = true, -- not the same as ensure_installed
             })
@@ -58,6 +58,11 @@ return {
                 ts_ls_cmd = "/mnt/c/Program Files/nodejs/typescript-language-server.cmd"
             end
 
+            lspconfig["pyright-langserver"].setup({
+                capabilities = capabilities,
+                on_attach = on_attach,
+            })
+
             lspconfig.ts_ls.setup({
                 cmd = { ts_ls_cmd, "--stdio" },
                 capabilities = capabilities,
@@ -88,18 +93,26 @@ return {
             })
 
             lspconfig.html.setup({
+                cmd = {
+                    "/home/asad/.local/share/nvim/mason/packages/html-lsp/node_modules/vscode-langservers-extracted/bin/vscode-html-language-server",
+                    "--stdio",
+                },
                 capabilities = capabilities,
             })
             lspconfig.cssls.setup({
+                cmd = {
+                    "/home/asad/.local/share/nvim/mason/packages/css-lsp/node_modules/vscode-langservers-extracted/bin/vscode-css-language-server",
+                    "--stdio",
+                },
                 capabilities = capabilities,
             })
-            -- lspconfig.tailwindcss.setup({
-            --     cmd = {
-            --         "/home/asad/.local/share/nvim/mason/packages/tailwindcss-language-server/node_modules/.bin/tailwindcss-language-server",
-            --         "--stdio",
-            --     },
-            --     capabilities = capabilities,
-            -- })
+            lspconfig.tailwindcss.setup({
+                cmd = {
+                    "/home/asad/.local/share/nvim/mason/packages/tailwindcss-language-server/node_modules/@tailwindcss/language-server/bin/tailwindcss-language-server",
+                    "--stdio",
+                },
+                capabilities = capabilities,
+            })
             -- astro --
             lspconfig["astro"].setup({
                 cmd = {

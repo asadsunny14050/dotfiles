@@ -81,7 +81,7 @@ function M.run_in_tmux_window(cmd_str)
     local send_command_cmd = string.format(
         "tmux send-keys -t '%s' %s C-m", -- Removed single quotes around %s because escaped_final_command already handles its own quoting
         window_name,
-        escaped_final_command      -- This string is already properly quoted/escaped by vim.fn.shellescape
+        escaped_final_command            -- This string is already properly quoted/escaped by vim.fn.shellescape
     )
     vim.fn.system(send_command_cmd)
 
@@ -105,7 +105,7 @@ function M.run_in_tmux_pane(cmd_str)
         "%s -c '%s; exec %s'",
         os.getenv("SHELL") or "sh", -- The shell to run the command in
         cmd_str:gsub("'", "'\\''"), -- The user's command, with single quotes escaped for the inner single-quoted string
-        os.getenv("SHELL") or "sh" -- The shell to exec into after the command
+        os.getenv("SHELL") or "sh"  -- The shell to exec into after the command
     )
     local tmux_split_command_arg = vim.fn.shellescape(final_command_for_tmux_shell)
 
@@ -176,10 +176,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
         vim.defer_fn(function()
             vim.lsp.inlay_hint.enable(false) -- ✅ only takes a boolean
-        end, 100)                   -- Delay to override any LSPs that re-enable them
+        end, 100)                            -- Delay to override any LSPs that re-enable them
     end,
 })
 
 vim.api.nvim_set_hl(0, "LspInlayHint", { link = "Comment" })
-
 return M

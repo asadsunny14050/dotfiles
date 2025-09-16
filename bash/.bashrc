@@ -125,6 +125,7 @@ alias gobashconfig="nvim ~/.bashrc"
 alias gotmuxconfig="nvim ~/.tmux.conf"
 alias gonvimconfig="cd ~/.config/nvim"
 alias ls=eza 
+alias lt="eza --tree" 
 alias fd=fdfind
 alias peek=peekaboo
 alias cat=batcat
@@ -133,6 +134,8 @@ alias vim=nvim
 alias vi=nvim
 alias v=nvim
 alias fman="compgen -c | fzf | xargs man"
+alias enter="explorer.exe ."
+alias clwin="/mnt/c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe"
 
 export FZF_DEFAULT_COMMAND='rg --files --hidden --no-ignore-vcs --glob "!{node_modules/*,.git/*}"'
 export PATH="/usr/local/bin:$PATH"
@@ -183,6 +186,15 @@ cdf() {
   fi
 }
 
+function hdf() {
+     # dir=$(find ~/coding -type d -name node_modules -prune -o -type d -print 2> /dev/null | fzf  --preview 'eza -l --color=always {}') && cd "$dir" && nvim . 
+     # using fd
+      dir=$( (find ~/ -maxdepth 1 -type d -print; \
+            find ~/ -mindepth 2 -type d -name node_modules -prune -o -type d -print) \
+            2> /dev/null | fzf --preview 'eza -l --color=always {}')
+
+    [ -n "$dir" ] && cd "$dir"
+}
 
 
 
@@ -207,9 +219,14 @@ export NODE_COMPILE_CACHE=~/.cache/nodejs-compile-cache
 
 set -o vi
 
-PS1='\n\u@\h:\w\$ '
+# PS1='\n\u@\h:\w\$ '
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 export EDITOR=$(which nvim)
+
+
+if [ -f /usr/bin/fastfetch ]; then 
+    fastfetch -c ~/dotfiles/neofetch.jsonc
+fi

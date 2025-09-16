@@ -16,10 +16,9 @@ $php\
 $character"""
 
 [directory]
-style = "fg:#000000 bg:#769ff0"
+style = "fg:#ffffff bg:#769ff0"
 format = "[ $path ]($style)"
-truncation_length = 3
-truncation_symbol = "…/"
+truncation_length = 1
 
 [directory.substitutions]
 "Documents" = "󰈙 "
@@ -64,5 +63,7 @@ format = '[[  $time ](fg:#a0a9cb bg:#1d2230)]($style)'
 
 
 [character]
-success_symbol = '[ ➜](bold green) '
 error_symbol = '[ ✗](#E84D44) '
+success_symbol = '[ ➜](bold green) '
+
+

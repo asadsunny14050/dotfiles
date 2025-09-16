@@ -3,15 +3,15 @@ vim.keymap.set("n", "-", ":Oil<CR>")
 
 vim.highlight.on_yank({
     higroup = "YankHighlight", -- The highlight group to use
-    timeout = 150,          -- How long the highlight stays (in ms)
+    timeout = 150,             -- How long the highlight stays (in ms)
 })
 
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
 -- puts cursor in the center during scroll
-vim.keymap.set("n", "<C-d>", "<C-d>zz")
-vim.keymap.set("n", "<C-u>", "<C-u>zz")
+vim.keymap.set("n", "<C-d>", "<C-d>")
+vim.keymap.set("n", "<C-u>", "<C-u>")
 
 vim.keymap.set("n", "<C-f>", "<C-f>zz") -- Make full-page scroll a jump
 vim.keymap.set("n", "<C-b>", "<Nop>")
@@ -92,23 +92,23 @@ vim.keymap.set("n", "j", "gj", { noremap = true })
 vim.keymap.set("n", "k", "gk", { noremap = true })
 
 vim.api.nvim_set_keymap(
-    "n",                                   -- Mode: 'n' for normal mode
-    "<leader>rt",                          -- The actual key combination (e.g., <space>rt or \rt)
-    ":ShellRunWin<CR>",                    -- The command to execute (calls your custom command)
+    "n",                                         -- Mode: 'n' for normal mode
+    "<leader>rt",                                -- The actual key combination (e.g., <space>rt or \rt)
+    ":ShellRunWin<CR>",                          -- The command to execute (calls your custom command)
     {
-        noremap = true,                    -- Prevents remapping (recommended)
-        silent = true,                     -- Prevents the command from echoing at the bottom
+        noremap = true,                          -- Prevents remapping (recommended)
+        silent = true,                           -- Prevents the command from echoing at the bottom
         desc = "Run command in new tmux window", -- A description for `:h mapleader` and tools like `which-key.nvim`
     }
 )
 
 vim.api.nvim_set_keymap(
-    "n",                                 -- Mode: 'n' for normal mode
-    "<leader>rh",                        -- The actual key combination (e.g., <space>rt or \rt)
-    ":ShellRunPane<CR>",                 -- The command to execute (calls your custom command)
+    "n",                                       -- Mode: 'n' for normal mode
+    "<leader>rh",                              -- The actual key combination (e.g., <space>rt or \rt)
+    ":ShellRunPane<CR>",                       -- The command to execute (calls your custom command)
     {
-        noremap = true,                  -- Prevents remapping (recommended)
-        silent = true,                   -- Prevents the command from echoing at the bottom
+        noremap = true,                        -- Prevents remapping (recommended)
+        silent = true,                         -- Prevents the command from echoing at the bottom
         desc = "Run command in new tmux pane", -- A description for `:h mapleader` and tools like `which-key.nvim`
     }
 )
