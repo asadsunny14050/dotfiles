@@ -166,7 +166,41 @@ cdf() {
   cd "$dir" || return
 
   # Get the directory name for session naming
-  session=$(basename "$dir")
+  session="$(basename "$dir") "" "
+
+  # If not in tmux, launch a new tmux session
+  if [ -z "$TMUX" ]; then
+    if tmux has-session -t "$session" 2>/dev/null; then
+      tmux attach-session -t "$session"
+    else
+      tmux new-session -s "$session"
+    fi
+  else
+    # If already inside tmux, create or switch to session in a new window
+    if tmux has-session -t "$session" 2>/dev/null; then
+      tmux switch-client -t "$session"
+    else
+      tmux new-session -ds "$session"
+      tmux switch-client -t "$session"
+    fi
+  fi
+}
+
+wdf() {
+  local dir session
+  dir=$(
+    (
+      fdfind --type d --max-depth 1 . /mnt/d/coding;
+      fdfind --type d --exclude node_modules . /mnt/d/coding
+    ) | fzf --preview 'eza -l --color=always {}'
+  )
+
+  [ -z "$dir" ] && return  # exit if nothing selected
+
+  cd "$dir" || return
+
+  # Get the directory name for session naming
+  session="$(basename "$dir") 󰍲 "
 
   # If not in tmux, launch a new tmux session
   if [ -z "$TMUX" ]; then
@@ -206,6 +240,11 @@ function vdf() {
             2> /dev/null | fzf --preview 'eza -l --color=always {}')
 
     [ -n "$dir" ] && cd "$dir" && nvim .
+}
+
+
+function cmd() {
+    cmd.exe /c "$*"
 }
 
 eval "$(starship init bash)"
