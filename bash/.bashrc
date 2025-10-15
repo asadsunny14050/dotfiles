@@ -124,8 +124,8 @@ alias gobase="cd ~/coding"
 alias gobashconfig="nvim ~/.bashrc"
 alias gotmuxconfig="nvim ~/.tmux.conf"
 alias gonvimconfig="cd ~/.config/nvim"
-alias ls=eza 
-alias lt="eza --tree" 
+alias ls=eza
+alias lt="eza --tree"
 alias fd=fdfind
 alias peek=peekaboo
 alias cat=batcat
@@ -221,7 +221,7 @@ wdf() {
 }
 
 function hdf() {
-     # dir=$(find ~/coding -type d -name node_modules -prune -o -type d -print 2> /dev/null | fzf  --preview 'eza -l --color=always {}') && cd "$dir" && nvim . 
+     # dir=$(find ~/coding -type d -name node_modules -prune -o -type d -print 2> /dev/null | fzf  --preview 'eza -l --color=always {}') && cd "$dir" && nvim .
      # using fd
       dir=$( (find ~/ -maxdepth 1 -type d -print; \
             find ~/ -mindepth 2 -type d -name node_modules -prune -o -type d -print) \
@@ -233,7 +233,7 @@ function hdf() {
 
 
 function vdf() {
-     # dir=$(find ~/coding -type d -name node_modules -prune -o -type d -print 2> /dev/null | fzf  --preview 'eza -l --color=always {}') && cd "$dir" && nvim . 
+     # dir=$(find ~/coding -type d -name node_modules -prune -o -type d -print 2> /dev/null | fzf  --preview 'eza -l --color=always {}') && cd "$dir" && nvim .
      # using fd
       dir=$( (find ~/coding -maxdepth 1 -type d -print; \
             find ~/coding -mindepth 2 -type d -name node_modules -prune -o -type d -print) \
@@ -266,6 +266,6 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 export EDITOR=$(which nvim)
 
 
-if [ -f /usr/bin/fastfetch ]; then 
+if [ -f /usr/bin/fastfetch ]; then
     fastfetch -c ~/dotfiles/neofetch.jsonc
 fi
