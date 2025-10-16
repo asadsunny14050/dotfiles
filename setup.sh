@@ -14,10 +14,12 @@ packages=(
   curl
   stow
   bat
+  eza
   fd-find
   fzf
   tldr
-  fastfetch
+  nala
+  unzip    # <-- Required by Bun
 )
 
 # Install packages if not installed
@@ -41,7 +43,7 @@ fi
 # Install NVM and Node LTS
 if [ ! -d "$HOME/.nvm" ]; then
   echo "Installing NVM..."
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.5/install.sh | bash
+  curl -o- -L https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
 fi
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
@@ -81,5 +83,27 @@ safe_stow bash
 safe_stow nvim
 safe_stow starship
 safe_stow tmux
+
+
+
+# Install Tmux Plugin Manager (TPM) and plugins
+TPM_DIR="$HOME/.tmux/plugins/tpm"
+
+if [ ! -d "$TPM_DIR" ]; then
+  echo "Installing Tmux Plugin Manager..."
+  if ! git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"; then
+    echo "Failed to clone TPM" >> "$LOG_FILE"
+  fi
+else
+  echo "TPM already installed."
+fi
+
+# Install all tmux plugins non-interactively
+if [ -d "$TPM_DIR" ]; then
+  echo "Installing Tmux plugins..."
+  if ! "$TPM_DIR/bin/install_plugins"; then
+    echo "Failed to install Tmux plugins" >> "$LOG_FILE"
+  fi
+fi
 
 echo "All done! Restart your terminal to apply changes."

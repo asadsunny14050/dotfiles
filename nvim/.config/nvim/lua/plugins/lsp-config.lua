@@ -2,6 +2,7 @@ return {
     {
         -- install the language server and its executable in the system
         "williamboman/mason.nvim",
+        -- enabled = false,
         config = function()
             require("mason").setup()
         end,
@@ -10,6 +11,7 @@ return {
         -- bridges mason and lspconfig plugins
         -- more specifically allow you to (i) automatically install, and (ii) automatically set up a predefined list of servers
         "williamboman/mason-lspconfig.nvim",
+        enabled = false,
         config = function()
             require("mason-lspconfig").setup({
                 ensure_installed = { "lua_ls", "ts_ls", "html", "cssls", "clangd", "tailwindcss" },
@@ -21,6 +23,7 @@ return {
     {
         -- connects the LSPs to the neovim client for use
         "neovim/nvim-lspconfig",
+        enabled = false,
         config = function()
             vim.diagnostic.config({ virtual_text = true })
             -- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
