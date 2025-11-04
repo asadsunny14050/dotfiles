@@ -11,11 +11,12 @@ return {
     lazy = false,
     config = function()
         require("oil").setup({
+            watch_for_changes = true,
             columns = {
                 "icon",
-                -- "permissions",
                 -- "size",
                 -- "mtime",
+                -- "permissions",
             },
             -- keymaps = {
             -- 	["<C-p>"] = "actions.preview",
@@ -24,6 +25,13 @@ return {
             view_options = {
                 show_hidden = true,
             },
+            on_attach = function(bufnr)
+                local api = vim.api
+                local dir = require("oil").get_current_dir()
+                api.nvim_buf_set_lines(bufnr, 0, 0, false, { dir }) -- insert at top
+                -- optionally make it read-only so you don't accidentally modify
+                api.nvim_buf_set_option(bufnr, "modifiable", false)
+            end,
         })
     end,
 }

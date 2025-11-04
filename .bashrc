@@ -132,7 +132,7 @@ alias cat=batcat
 alias inv='nvim $(fzf --preview="batcat --color=always {}")'
 alias vim=nvim
 alias vi=nvim
-alias v=nvim
+alias v='nvim .'
 alias fman="compgen -c | fzf | xargs man"
 alias enter="explorer.exe ."
 alias clwin="/mnt/c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe"
@@ -269,3 +269,7 @@ export EDITOR=$(which nvim)
 if [ -f /usr/bin/fastfetch ]; then
     fastfetch -c ~/dotfiles/neofetch.jsonc
 fi
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

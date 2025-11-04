@@ -3,7 +3,7 @@ vim.keymap.set("n", "-", ":Oil<CR>")
 
 vim.highlight.on_yank({
     higroup = "YankHighlight", -- The highlight group to use
-    timeout = 150,             -- How long the highlight stays (in ms)
+    timeout = 150,          -- How long the highlight stays (in ms)
 })
 
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
@@ -92,23 +92,23 @@ vim.keymap.set("n", "j", "gj", { noremap = true })
 vim.keymap.set("n", "k", "gk", { noremap = true })
 
 vim.api.nvim_set_keymap(
-    "n",                                         -- Mode: 'n' for normal mode
-    "<leader>rt",                                -- The actual key combination (e.g., <space>rt or \rt)
-    ":ShellRunWin<CR>",                          -- The command to execute (calls your custom command)
+    "n",                                   -- Mode: 'n' for normal mode
+    "<leader>rt",                          -- The actual key combination (e.g., <space>rt or \rt)
+    ":ShellRunWin<CR>",                    -- The command to execute (calls your custom command)
     {
-        noremap = true,                          -- Prevents remapping (recommended)
-        silent = true,                           -- Prevents the command from echoing at the bottom
+        noremap = true,                    -- Prevents remapping (recommended)
+        silent = true,                     -- Prevents the command from echoing at the bottom
         desc = "Run command in new tmux window", -- A description for `:h mapleader` and tools like `which-key.nvim`
     }
 )
 
 vim.api.nvim_set_keymap(
-    "n",                                       -- Mode: 'n' for normal mode
-    "<leader>rh",                              -- The actual key combination (e.g., <space>rt or \rt)
-    ":ShellRunPane<CR>",                       -- The command to execute (calls your custom command)
+    "n",                                 -- Mode: 'n' for normal mode
+    "<leader>rh",                        -- The actual key combination (e.g., <space>rt or \rt)
+    ":ShellRunPane<CR>",                 -- The command to execute (calls your custom command)
     {
-        noremap = true,                        -- Prevents remapping (recommended)
-        silent = true,                         -- Prevents the command from echoing at the bottom
+        noremap = true,                  -- Prevents remapping (recommended)
+        silent = true,                   -- Prevents the command from echoing at the bottom
         desc = "Run command in new tmux pane", -- A description for `:h mapleader` and tools like `which-key.nvim`
     }
 )
@@ -120,3 +120,8 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename)
+
+-- open oil directory in vertical split
+vim.api.nvim_set_keymap("n", "<leader>-", ":vsplit | Oil<CR>", { noremap = true, silent = true })
+-- map <leader>o to close all other splits
+vim.api.nvim_set_keymap("n", "<leader>o", ":only<CR>", { noremap = true, silent = true })

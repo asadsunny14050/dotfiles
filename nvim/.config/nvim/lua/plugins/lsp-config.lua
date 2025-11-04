@@ -2,6 +2,7 @@ return {
     {
         -- install the language server and its executable in the system
         "williamboman/mason.nvim",
+        version = "v1.*",
         -- enabled = false,
         config = function()
             require("mason").setup()
@@ -23,15 +24,22 @@ return {
     {
         -- connects the LSPs to the neovim client for use
         "neovim/nvim-lspconfig",
-        enabled = false,
+        version = "v1.*",
+        -- enabled = false,
         config = function()
             vim.diagnostic.config({ virtual_text = true })
             -- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
-            local capabilities = require("cmp_nvim_lsp").default_capabilities()
+            -- local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
             local lspconfig = require("lspconfig")
             lspconfig.lua_ls.setup({
-                capabilities = capabilities,
+                -- capabilities = capabilities,
+                single_file_support = true,
+                root_dir = function(fname)
+                    local util = require("lspconfig.util")
+                    -- Try to find git root first, otherwise use the file's directory
+                    return util.find_git_ancestor(fname) or util.path.dirname(fname)
+                end,
             })
 
             require("nvim-navic") -- or let lazy.nvim load it
@@ -61,14 +69,14 @@ return {
                 ts_ls_cmd = "/mnt/c/Program Files/nodejs/typescript-language-server.cmd"
             end
 
-            lspconfig["pyright-langserver"].setup({
-                capabilities = capabilities,
-                on_attach = on_attach,
-            })
+            -- lspconfig["pyright-langserver"].setup({
+            --     capabilities = capabilities,
+            --     -- on_attach = on_attach,
+            -- })
 
             lspconfig.ts_ls.setup({
                 cmd = { ts_ls_cmd, "--stdio" },
-                capabilities = capabilities,
+                -- capabilities = capabilities,
                 filetypes = {
                     "typescript",
                     "typescriptreact",
@@ -100,21 +108,21 @@ return {
                     "/home/asad/.local/share/nvim/mason/packages/html-lsp/node_modules/vscode-langservers-extracted/bin/vscode-html-language-server",
                     "--stdio",
                 },
-                capabilities = capabilities,
+                -- capabilities = capabilities,
             })
             lspconfig.cssls.setup({
                 cmd = {
                     "/home/asad/.local/share/nvim/mason/packages/css-lsp/node_modules/vscode-langservers-extracted/bin/vscode-css-language-server",
                     "--stdio",
                 },
-                capabilities = capabilities,
+                -- capabilities = capabilities,
             })
             lspconfig.tailwindcss.setup({
                 cmd = {
                     "/home/asad/.local/share/nvim/mason/packages/tailwindcss-language-server/node_modules/@tailwindcss/language-server/bin/tailwindcss-language-server",
                     "--stdio",
                 },
-                capabilities = capabilities,
+                -- capabilities = capabilities,
             })
             -- astro --
             lspconfig["astro"].setup({
@@ -123,8 +131,8 @@ return {
                     "/home/asad/.local/share/nvim/mason/packages/astro-language-server/node_modules/@astrojs/language-server/bin/nodeServer.js",
                     "--stdio",
                 },
-                capabilities = capabilities,
-                on_attach = on_attach,
+                -- capabilities = capabilities,
+                -- on_attach = on_attach,
                 filetypes = { "astro" },
             })
             vim.keymap.set("n", "K", vim.lsp.buf.hover, {})

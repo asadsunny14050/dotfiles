@@ -1,6 +1,12 @@
 vim.opt.nu = true
 vim.opt.relativenumber = true
 
+vim.opt.autoread = true
+vim.opt.confirm = true
+vim.cmd([[
+  autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * checktime
+]])
+
 vim.opt.hlsearch = false
 vim.opt.incsearch = true
 

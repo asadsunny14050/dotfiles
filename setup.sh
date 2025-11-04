@@ -17,6 +17,7 @@ packages=(
   eza
   fd-find
   fzf
+  ripgrep
   tldr
   nala
   unzip    # <-- Required by Bun
