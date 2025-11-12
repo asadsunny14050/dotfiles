@@ -247,6 +247,10 @@ function cmd() {
     cmd.exe /c "$*"
 }
 
+function ps() {
+    powershell.exe -Command "$*"
+}
+
 eval "$(starship init bash)"
 
 
@@ -273,3 +277,35 @@ fi
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+# cmdmode() {
+#     if [[ -n "$CMD_MODE" ]]; then
+#         unset CMD_MODE
+#         echo "🔁 CMD mode OFF"
+#         return
+#     fi
+#     export CMD_MODE=1
+#     echo "💻 CMD mode ON"
+# }
+
+# trap '
+# if [[ -n "$CMD_MODE" ]]; then
+#     case "$BASH_COMMAND" in
+#         cmdmode* | trap* | starship_precmd* | eval\ *starship_precmd* )
+#             ;;
+#         *)
+#             # Run the command through CMD
+#             cmd.exe /C "$BASH_COMMAND"
+#             history -s "$BASH_COMMAND"
+#             # Skip bash execution by short-circuiting with a harmless builtin
+#             BASH_COMMAND=":"
+#            ;;
+#     esac
+# fi
+# ' DEBUG
+
+
+
+
+

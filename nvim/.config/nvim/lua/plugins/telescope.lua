@@ -35,9 +35,9 @@ return {
             LAST_BROWSER_PATH = vim.fn.expand("~")
 
             local function attach_file_browser_mappings(prompt_bufnr)
-                local actions = require("telescope.actions")
-                local action_state = require("telescope.actions.state")
-                local telescope = require("telescope")
+                -- local actions = require("telescope.actions")
+                -- local action_state = require("telescope.actions.state")
+                -- local telescope = require("telescope")
 
                 local function open_entry(entry_bufnr)
                     local entry = action_state.get_selected_entry()
@@ -47,6 +47,8 @@ return {
                         require("oil").open(entry.path)
                     else
                         vim.cmd("edit " .. vim.fn.fnameescape(entry.path))
+                        vim.cmd("filetype detect") -- optional
+                        vim.cmd("setlocal buflisted") -- make sure buffer is listed
                     end
                 end
 
@@ -72,6 +74,57 @@ return {
                     end
                 end
 
+                local function tab_autocomplete2()
+                    local entry = action_state.get_selected_entry()
+                    if not entry or not entry.path then
+                        return
+                    end
+
+                    local picker = action_state.get_current_picker(prompt_bufnr)
+                    if not picker then
+                        return
+                    end
+
+                    local current = action_state.get_current_line() or ""
+
+                    -- split current prompt by / and get all except last
+                    local parts = vim.split(current, "/", true)
+                    local prefix = table.concat(parts, "/", 1, #parts - 1)
+                    if prefix ~= "" then
+                        prefix = prefix .. "/" -- keep the preceding path
+                    end
+
+                    -- selected basename
+                    local name = vim.fn.fnamemodify(entry.path, ":t")
+
+                    -- reset prompt: keep path before last component, replace last component
+                    local new_prompt = prefix .. name
+                    picker:reset_prompt(new_prompt)
+
+                    -- local entry = action_state.get_selected_entry()
+                    -- if not entry or not entry.path then
+                    --     return
+                    -- end
+
+                    -- local picker = action_state.get_current_picker(prompt_bufnr)
+                    -- if vim.fn.isdirectory(entry.path) == 1 then
+                    --     -- actions.close(prompt_bufnr)
+                    --     -- telescope.extensions.file_browser.file_browser({
+                    --     --     path = entry.path,
+                    --     --     cwd = entry.path,
+                    --     --     hidden = true,
+                    --     --     respect_gitignore = false,
+                    --     --     prompt_title = entry.path,
+                    --     --     attach_mappings = attach_file_browser_mappings,
+                    --     -- })
+                    --     local str
+                    --     str = entry.path:gsub("/$", "")
+                    --     picker:reset_prompt(str)
+                    -- else
+                    --     picker:reset_prompt(entry.path)
+                    -- end
+                end
+
                 local map = function(mode, key, fn)
                     vim.keymap.set(mode, key, fn, { buffer = prompt_bufnr })
                 end
@@ -84,7 +137,7 @@ return {
                 end)
                 map("i", "<Tab>", tab_autocomplete)
 
-                return false -- ✅ disables Telescope's default mappings (so our <Tab> works)
+                return false --  disables Telescope's default mappings (so our <Tab> works)
             end
 
             vim.keymap.set("n", "<leader>sf", function()

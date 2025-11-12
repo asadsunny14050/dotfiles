@@ -20,3 +20,5 @@ vim.opt.scrolloff = 8
 vim.opt.wrap = true
 
 vim.cmd("filetype plugin indent on") -- Enable filetype-specific indentation
+
+vim.o.laststatus = 3

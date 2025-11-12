@@ -1,7 +1,7 @@
 command_timeout = 2000
 format = """
 [░▒▓](#a3aed2)\
-[   asad ](bg:#a3aed2 fg:#090c0c)\
+[  asad ](bg:#a3aed2 fg:#090c0c)\
 [](bg:#769ff0 fg:#a3aed2)\
 $directory\
 [](fg:#769ff0 bg:#394260)\
@@ -18,7 +18,7 @@ $character"""
 [directory]
 style = "fg:#ffffff bg:#769ff0"
 format = "[ $path ]($style)"
-truncation_length = 1
+truncation_length = 2
 
 [directory.substitutions]
 "Documents" = "󰈙 "

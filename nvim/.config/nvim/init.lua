@@ -1,5 +1,4 @@
 require("asadsunny")
-
 vim.api.nvim_create_autocmd("VimEnter", {
     callback = function()
         local stat = vim.loop.fs_stat(vim.fn.argv(0))
@@ -9,6 +8,62 @@ vim.api.nvim_create_autocmd("VimEnter", {
         end
     end,
 })
+
+vim.api.nvim_create_autocmd("VimEnter", {
+    callback = function()
+        local devicons = require("nvim-web-devicons")
+
+        -- Only use the icon, set a fixed color
+        local exe_icon = devicons.get_icon("exe") or ""
+
+        -- Map all files with no extension to this icon
+        devicons.set_icon({
+            [""] = {   -- empty string = no extension
+                icon = exe_icon,
+                color = "#f92672", -- fixed hex, avoids invalid highlight errors
+                name = "NoExtBinary",
+            },
+        })
+    end,
+})
+
+vim.api.nvim_create_user_command("Edit", function(opts)
+    local arg = opts.args
+
+    -- No args → behave like normal :edit
+    if arg == "" then
+        vim.cmd("edit")
+        return
+    end
+
+    -- Starts with ./ → use working directory (cwd)
+    if arg:match("^%./") then
+        local cwd = vim.fn.getcwd()
+        local path = cwd .. "/" .. arg:sub(3) -- remove the './'
+        vim.cmd("edit " .. vim.fn.fnameescape(path))
+        return
+    end
+
+    -- Has slashes → treat as path relative to cwd (normal behavior)
+    if arg:match("[/\\]") or arg:match("^[A-Za-z]:") then
+        vim.cmd("edit " .. vim.fn.fnameescape(arg))
+        return
+    end
+
+    -- Default case → create in current buffer’s directory
+    local current_dir = vim.fn.expand("%:p:h")
+    if current_dir == "" then
+        -- fallback if no buffer (like start screen or terminal)
+        current_dir = vim.fn.getcwd()
+    end
+    vim.cmd("edit " .. vim.fn.fnameescape(current_dir .. "/" .. arg))
+end, {
+    nargs = "?",
+    complete = "file",
+})
+
+vim.cmd("cabbrev e Edit")
+
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -81,7 +136,7 @@ function M.run_in_tmux_window(cmd_str)
     local send_command_cmd = string.format(
         "tmux send-keys -t '%s' %s C-m", -- Removed single quotes around %s because escaped_final_command already handles its own quoting
         window_name,
-        escaped_final_command            -- This string is already properly quoted/escaped by vim.fn.shellescape
+        escaped_final_command      -- This string is already properly quoted/escaped by vim.fn.shellescape
     )
     vim.fn.system(send_command_cmd)
 
@@ -105,7 +160,7 @@ function M.run_in_tmux_pane(cmd_str)
         "%s -c '%s; exec %s'",
         os.getenv("SHELL") or "sh", -- The shell to run the command in
         cmd_str:gsub("'", "'\\''"), -- The user's command, with single quotes escaped for the inner single-quoted string
-        os.getenv("SHELL") or "sh"  -- The shell to exec into after the command
+        os.getenv("SHELL") or "sh" -- The shell to exec into after the command
     )
     local tmux_split_command_arg = vim.fn.shellescape(final_command_for_tmux_shell)
 
@@ -181,4 +236,5 @@ end, { nargs = "?", complete = "shellcmd", desc = "Run command in a new tmux pan
 -- })
 
 vim.api.nvim_set_hl(0, "LspInlayHint", { link = "Comment" })
+
 return M

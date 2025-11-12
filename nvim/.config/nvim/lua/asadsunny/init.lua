@@ -4,6 +4,7 @@ local M = {}
 require("asadsunny.remap")
 require("asadsunny.set")
 require("asadsunny.auto-build")
+require("asadsunny.compile")
 
 -- Import and expose switch-project
 M.switch_project = require("asadsunny.switch-project")

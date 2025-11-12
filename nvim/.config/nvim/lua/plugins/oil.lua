@@ -25,13 +25,15 @@ return {
             view_options = {
                 show_hidden = true,
             },
-            on_attach = function(bufnr)
-                local api = vim.api
-                local dir = require("oil").get_current_dir()
-                api.nvim_buf_set_lines(bufnr, 0, 0, false, { dir }) -- insert at top
-                -- optionally make it read-only so you don't accidentally modify
-                api.nvim_buf_set_option(bufnr, "modifiable", false)
-            end,
+            lsp_file_methods = {
+                -- Enable or disable LSP file operations
+                enabled = true,
+                -- Time to wait for LSP file operations to complete before skipping
+                timeout_ms = 1000,
+                -- Set to true to autosave buffers that are updated with LSP willRenameFiles
+                -- Set to "unmodified" to only save unmodified buffers
+                autosave_changes = false,
+            },
         })
     end,
 }
