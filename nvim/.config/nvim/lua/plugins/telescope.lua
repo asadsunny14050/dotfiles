@@ -3,6 +3,7 @@ return {
         "nvim-telescope/telescope.nvim",
         tag = "0.1.8",
         dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope-file-browser.nvim" },
+        cmd = "Telescope",
         config = function()
             local telescope = require("telescope")
             local builtin = require("telescope.builtin")
@@ -15,7 +16,7 @@ return {
                 defaults = {
                     layout_strategy = "bottom_pane",
                     layout_config = {
-                        height = 0.4,
+                        height = 0.5,
                     },
                     -- border = true,
                     borderchars = {

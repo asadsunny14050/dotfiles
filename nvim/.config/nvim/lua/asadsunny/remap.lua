@@ -3,7 +3,7 @@ vim.keymap.set("n", "-", ":Oil<CR>")
 
 vim.highlight.on_yank({
     higroup = "YankHighlight", -- The highlight group to use
-    timeout = 150,          -- How long the highlight stays (in ms)
+    timeout = 150,             -- How long the highlight stays (in ms)
 })
 
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
@@ -19,6 +19,8 @@ vim.keymap.set("c", "<C-b>", "<Nop>")
 
 -- switch back to previous buffer
 vim.keymap.set("n", "<leader>bb", ":b#<CR>")
+-- switch back to previous buffer in vertical split
+vim.keymap.set("n", "<leader>bv", ":vsplit #<CR>")
 
 -- greatest remap ever
 vim.keymap.set("x", "<leader>p", '"_dP')
@@ -92,23 +94,23 @@ vim.keymap.set("n", "j", "gj", { noremap = true })
 vim.keymap.set("n", "k", "gk", { noremap = true })
 
 vim.api.nvim_set_keymap(
-    "n",                                   -- Mode: 'n' for normal mode
-    "<leader>rt",                          -- The actual key combination (e.g., <space>rt or \rt)
-    ":ShellRunWin<CR>",                    -- The command to execute (calls your custom command)
+    "n",                                         -- Mode: 'n' for normal mode
+    "<leader>rt",                                -- The actual key combination (e.g., <space>rt or \rt)
+    ":ShellRunWin<CR>",                          -- The command to execute (calls your custom command)
     {
-        noremap = true,                    -- Prevents remapping (recommended)
-        silent = true,                     -- Prevents the command from echoing at the bottom
+        noremap = true,                          -- Prevents remapping (recommended)
+        silent = true,                           -- Prevents the command from echoing at the bottom
         desc = "Run command in new tmux window", -- A description for `:h mapleader` and tools like `which-key.nvim`
     }
 )
 
 vim.api.nvim_set_keymap(
-    "n",                                 -- Mode: 'n' for normal mode
-    "<leader>rh",                        -- The actual key combination (e.g., <space>rt or \rt)
-    ":ShellRunPane<CR>",                 -- The command to execute (calls your custom command)
+    "n",                                       -- Mode: 'n' for normal mode
+    "<leader>rh",                              -- The actual key combination (e.g., <space>rt or \rt)
+    ":ShellRunPane<CR>",                       -- The command to execute (calls your custom command)
     {
-        noremap = true,                  -- Prevents remapping (recommended)
-        silent = true,                   -- Prevents the command from echoing at the bottom
+        noremap = true,                        -- Prevents remapping (recommended)
+        silent = true,                         -- Prevents the command from echoing at the bottom
         desc = "Run command in new tmux pane", -- A description for `:h mapleader` and tools like `which-key.nvim`
     }
 )
@@ -125,3 +127,34 @@ vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename)
 vim.api.nvim_set_keymap("n", "<leader>-", ":vsplit | Oil<CR>", { noremap = true, silent = true })
 -- map <leader>o to close all other splits
 vim.api.nvim_set_keymap("n", "<leader>o", ":only<CR>", { noremap = true, silent = true })
+
+-- Map Ctrl+Shift+C to call copy_path
+vim.api.nvim_set_keymap("n", "<C-S-x>", ":lua copy_path()<CR>", { noremap = true, silent = true })
+
+-- Function to copy current path to clipboard
+function _G.copy_path()
+    local path
+
+    -- Check if the buffer has a file name (normal file)
+    if vim.api.nvim_buf_get_name(0) ~= "" then
+        path = vim.api.nvim_buf_get_name(0)
+    else
+        -- Otherwise, fallback to current working directory (useful for Oil or empty buffer)
+        path = vim.fn.getcwd()
+    end
+
+    -- Remove oil:// prefix if present
+    path = path:gsub("^oil://", "")
+
+    -- Copy to system clipboard
+    vim.fn.setreg("+", path)
+
+    -- Print message
+    vim.api.nvim_echo({
+        { "Copied: ", "Normal" },
+        { path,       "String" }, -- highlight the path like a string
+    }, false, {})
+end
+
+-- Map Ctrl+Shift+C to call copy_path
+vim.api.nvim_set_keymap("n", "<leader>g", ":lua _G.copy_path()<CR>", { noremap = true, silent = true })

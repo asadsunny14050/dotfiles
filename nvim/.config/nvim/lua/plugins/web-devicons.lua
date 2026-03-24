@@ -1,6 +1,7 @@
 return {
 
     "nvim-tree/nvim-web-devicons",
+    lazy = true,
     config = function()
         -- In your nvim config (e.g., ~/.config/nvim/lua/config/icons.lua or init.lua)
 
@@ -72,37 +73,6 @@ return {
             blend = 0,
             -- same as `override` but specifically for overrides by filename
             -- takes effect when `strict` is true
-            override_by_filename = {
-                [".gitignore"] = {
-                    icon = "",
-                    color = "#f1502f",
-                    name = "Gitignore",
-                },
-                -- ["cs"] = {
-                --     icon = "󰌛",
-                --     color = "#512E9A",
-                --     name = "csharp",
-                -- },
-            },
-            -- same as `override` but specifically for overrides by extension
-            -- takes effect when `strict` is true
-            override_by_extension = {
-                ["log"] = {
-                    icon = "",
-                    color = "#81e043",
-                    name = "Log",
-                },
-            },
-            -- same as `override` but specifically for operating system
-            -- takes effect when `strict` is true
-            override_by_operating_system = {
-                ["apple"] = {
-                    icon = "",
-                    color = "#A2AAAD",
-                    cterm_color = "248",
-                    name = "Apple",
-                },
-            },
         })
     end,
 }

@@ -45,6 +45,7 @@ return {
             require("nvim-navic") -- or let lazy.nvim load it
 
             local capabilities2 = vim.lsp.protocol.make_client_capabilities()
+            local complete_cap = require("cmp_nvim_lsp").default_capabilities()
             local navic = require("nvim-navic")
             lspconfig.clangd.setup({
                 capabilities = capabilities2,
@@ -63,20 +64,57 @@ return {
                 end,
             })
 
-            -- Windows fix: Use "typescript-language-server.cmd"
-            local ts_ls_cmd = "/mnt/c/Program Files/nodejs/typescript-language-server"
-            if vim.loop.os_uname().sysname == "Windows_NT" then
-                ts_ls_cmd = "/mnt/c/Program Files/nodejs/typescript-language-server.cmd"
-            end
+            -- -- Windows fix: Use "typescript-language-server.cmd"
+            -- local ts_ls_cmd = "/mnt/c/Program Files/nodejs/typescript-language-server"
+            -- if vim.loop.os_uname().sysname == "Windows_NT" then
+            --     ts_ls_cmd = "/mnt/c/Program Files/nodejs/typescript-language-server.cmd"
+            -- end
 
             -- lspconfig["pyright-langserver"].setup({
             --     capabilities = capabilities,
             --     -- on_attach = on_attach,
             -- })
+            --
+            require("lspconfig").rust_analyzer.setup({
+                cmd = { "rustup", "run", "stable", "rust-analyzer" },
+                capabilities = vim.tbl_deep_extend("force", complete_cap, capabilities2),
+                init_options = {
+                    inlayHints = {
+                        parameterNames = { enabled = "all" },
+                    },
+                },
+                on_attach = function(client, bufnr)
+                    vim.lsp.inlay_hint.enable(true)
+
+                    -- Attach navic if supported
+                    if client.server_capabilities.documentSymbolProvider then
+                        navic.attach(client, bufnr)
+                    end
+                end,
+            })
+
+            require("lspconfig").csharp_ls.setup({
+                cmd = { "csharp-ls" },
+                root_dir = require("lspconfig.util").root_pattern("*.sln", "*.csproj"),
+                capabilities = capabilities2,
+                init_options = {
+                    inlayHints = {
+                        parameterNames = { enabled = "all" },
+                    },
+                },
+                on_attach = function(client, bufnr)
+                    vim.lsp.inlay_hint.enable(true)
+
+                    -- Attach navic if supported
+                    if client.server_capabilities.documentSymbolProvider then
+                        navic.attach(client, bufnr)
+                    end
+                end,
+            })
 
             lspconfig.ts_ls.setup({
-                cmd = { ts_ls_cmd, "--stdio" },
-                -- capabilities = capabilities,
+                -- cmd = { ts_ls_cmd, "--stdio" },
+                capabilities = complete_cap,
                 filetypes = {
                     "typescript",
                     "typescriptreact",
@@ -84,21 +122,42 @@ return {
                     "javascriptreact",
                     "typescript.tsx",
                     "javascript.jsx",
-                },                          -- Attach to all types of ts/js files
+                },              -- Attach to all types of ts/js files
                 single_file_support = true, -- 🔥 Enables LSP for standalone .ts files
                 root_dir = function(fname)
                     -- You can check if a `tsconfig.json` exists in the directory and use that as root
                     return require("lspconfig").util.find_git_ancestor(fname) or
-                        vim.fn.getcwd() -- fallback to current working directory
+                    vim.fn.getcwd()                                               -- fallback to current working directory
                 end,
                 init_options = {
+                    hostInfo = "neovim",
                     preferences = {
-                        disableSuggestions = false,                   -- Allow autocomplete
-                        importModuleSpecifierPreference = "relative", -- This is optional
+                        includeCompletionsForModuleExports = false,
+                        includeCompletionsForImportStatements = false,
+                    },
+                },
+                settings = {
+                    typescript = {
+                        disableAutomaticTypeAcquisition = true,
+                        suggest = {
+                            autoImports = false,
+                        },
+                        tsserver = {
+                            maxTsServerMemory = 256, -- limit memory usage (MB)
+                        },
+                    },
+                    javascript = {
+                        disableAutomaticTypeAcquisition = true,
+                        suggest = {
+                            autoImports = false,
+                        },
+                        tsserver = {
+                            maxTsServerMemory = 256,
+                        },
                     },
                 },
                 on_attach = function(_, bufnr)
-                    return vim.lsp.get_clients({ bufnr = bufnr })
+                    -- return vim.lsp.get_clients({ bufnr = bufnr })
                 end,
                 -- capabilities = vim.lsp.protocol.make_client_capabilities(),
             })
@@ -110,18 +169,18 @@ return {
                 },
                 -- capabilities = capabilities,
             })
-            lspconfig.cssls.setup({
-                cmd = {
-                    "/home/asad/.local/share/nvim/mason/packages/css-lsp/node_modules/vscode-langservers-extracted/bin/vscode-css-language-server",
-                    "--stdio",
-                },
-                -- capabilities = capabilities,
-            })
+            -- lspconfig.cssls.setup({
+            --     cmd = {
+            --         "/home/asad/.local/share/nvim/mason/packages/css-lsp/node_modules/vscode-langservers-extracted/bin/vscode-css-language-server",
+            --         "--stdio",
+            --     },
+            --     -- capabilities = capabilities,
+            -- })
             lspconfig.tailwindcss.setup({
-                cmd = {
-                    "/home/asad/.local/share/nvim/mason/packages/tailwindcss-language-server/node_modules/@tailwindcss/language-server/bin/tailwindcss-language-server",
-                    "--stdio",
-                },
+                -- cmd = {
+                --     "/home/asad/.local/share/nvim/mason/packages/tailwindcss-language-server/node_modules/@tailwindcss/language-server/bin/tailwindcss-language-server",
+                --     "--stdio",
+                -- },
                 -- capabilities = capabilities,
             })
             -- astro --

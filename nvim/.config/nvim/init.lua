@@ -1,29 +1,77 @@
 require("asadsunny")
-vim.api.nvim_create_autocmd("VimEnter", {
+-- Function to toggle LSP diagnostic virtual text
+local toggle_diagnostic_virtual_text = function()
+    -- Get the current configuration
+    local current_config = vim.diagnostic.config()
+    -- Toggle the virtual_text setting
+    local new_state = not current_config.virtual_text
+    vim.diagnostic.config({
+        virtual_text = new_state,
+        -- You can also optionally toggle other settings like signs or underline here
+        -- signs = new_state,
+        -- underline = new_state,
+    })
+    print("LSP Virtual Text Toggled: " .. tostring(new_state))
+end
+
+-- Set a normal mode keymap (e.g., <leader>dv for Diagnostic Virtual text)
+vim.keymap.set("n", "<leader>l", toggle_diagnostic_virtual_text, { desc = "Toggle LSP diagnostic virtual text" })
+
+
+-- Lua helper: run shell command dynamically in Oil or file buffer
+local function RunShellCommand()
+    -- Determine working directory
+    local dir = vim.b.oil_dir        -- Oil directory buffer
+    if not dir or dir == "" then
+        dir = vim.fn.expand("%:p:h") -- current file folder
+    end
+    if not dir or dir == "" then
+        dir = vim.fn.getcwd() -- fallback to Neovim cwd
+    end
+
+    -- Remove 'oil://' if present
+    dir = dir:gsub("^oil://", "")
+
+    -- Make sure the directory exists
+    if vim.fn.isdirectory(dir) == 0 then
+        vim.notify("Invalid directory: " .. dir, vim.log.levels.ERROR)
+        return
+    end
+
+    -- Ask for command
+    local input = vim.fn.input("Command: ")
+    if input == "" then
+        return
+    end
+    local args = vim.split(input, " ")
+
+    -- Run asynchronously
+    vim.fn.jobstart(args, {
+        cwd = dir,
+        stdout_buffered = true,
+        stderr_buffered = true,
+        on_stdout = function(_, data)
+            if data then
+                for _, line in ipairs(data) do
+                    print(line)
+                end
+            end
+        end,
+        on_stderr = function(_, data)
+            if data then
+                for _, line in ipairs(data) do
+                    vim.api.nvim_err_writeln(line)
+                end
+            end
+        end,
+    })
+end
+
+-- Map to a key in Oil buffers
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "oil",
     callback = function()
-        local stat = vim.loop.fs_stat(vim.fn.argv(0))
-        if stat and stat.type == "directory" then
-            -- open Oil on the directory you started Neovim with
-            require("oil").open()
-        end
-    end,
-})
-
-vim.api.nvim_create_autocmd("VimEnter", {
-    callback = function()
-        local devicons = require("nvim-web-devicons")
-
-        -- Only use the icon, set a fixed color
-        local exe_icon = devicons.get_icon("exe") or ""
-
-        -- Map all files with no extension to this icon
-        devicons.set_icon({
-            [""] = {   -- empty string = no extension
-                icon = exe_icon,
-                color = "#f92672", -- fixed hex, avoids invalid highlight errors
-                name = "NoExtBinary",
-            },
-        })
+        vim.keymap.set("n", "<leader>x", RunShellCommand, { buffer = true, desc = "Run shell in Oil dir" })
     end,
 })
 
@@ -136,7 +184,7 @@ function M.run_in_tmux_window(cmd_str)
     local send_command_cmd = string.format(
         "tmux send-keys -t '%s' %s C-m", -- Removed single quotes around %s because escaped_final_command already handles its own quoting
         window_name,
-        escaped_final_command      -- This string is already properly quoted/escaped by vim.fn.shellescape
+        escaped_final_command            -- This string is already properly quoted/escaped by vim.fn.shellescape
     )
     vim.fn.system(send_command_cmd)
 
@@ -160,7 +208,7 @@ function M.run_in_tmux_pane(cmd_str)
         "%s -c '%s; exec %s'",
         os.getenv("SHELL") or "sh", -- The shell to run the command in
         cmd_str:gsub("'", "'\\''"), -- The user's command, with single quotes escaped for the inner single-quoted string
-        os.getenv("SHELL") or "sh" -- The shell to exec into after the command
+        os.getenv("SHELL") or "sh"  -- The shell to exec into after the command
     )
     local tmux_split_command_arg = vim.fn.shellescape(final_command_for_tmux_shell)
 

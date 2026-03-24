@@ -21,4 +21,4 @@ vim.opt.wrap = true
 
 vim.cmd("filetype plugin indent on") -- Enable filetype-specific indentation
 
-vim.o.laststatus = 3
+-- vim.o.laststatus = 2

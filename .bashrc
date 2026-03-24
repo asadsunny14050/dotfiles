@@ -119,12 +119,12 @@ fi
 # Setup fzf keybindings and fuzzy completion
 # eval "$(fzf --bash)"
 
-alias gohome="cd ~"
-alias gobase="cd ~/coding"
-alias gobashconfig="nvim ~/.bashrc"
-alias gotmuxconfig="nvim ~/.tmux.conf"
-alias gonvimconfig="cd ~/.config/nvim"
-alias ls=eza
+alias home="cd ~"
+alias base="cd ~/coding"
+alias bashconfig="nvim ~/.bashrc"
+alias tmuxconfig="nvim ~/.tmux.conf"
+alias nvimconfig="cd ~/.config/nvim && nvim ."
+alias ls="eza --icons"
 alias lt="eza --tree"
 alias fd=fdfind
 alias peek=peekaboo
@@ -134,7 +134,7 @@ alias vim=nvim
 alias vi=nvim
 alias v='nvim .'
 alias fman="compgen -c | fzf | xargs man"
-alias enter="explorer.exe ."
+alias explore="explorer.exe ."
 alias clwin="/mnt/c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe"
 
 export FZF_DEFAULT_COMMAND='rg --files --hidden --no-ignore-vcs --glob "!{node_modules/*,.git/*}"'
@@ -184,6 +184,8 @@ cdf() {
       tmux switch-client -t "$session"
     fi
   fi
+
+  cd -
 }
 
 wdf() {
@@ -218,6 +220,8 @@ wdf() {
       tmux switch-client -t "$session"
     fi
   fi
+
+  cd -
 }
 
 function hdf() {
@@ -242,13 +246,16 @@ function vdf() {
     [ -n "$dir" ] && cd "$dir" && nvim .
 }
 
-
 function cmd() {
     cmd.exe /c "$*"
 }
 
 function ps() {
-    powershell.exe -Command "$*"
+    pwsh.exe -Command "$*"
+}
+
+function nvimpushchanges() {
+     rsync -av --delete "$HOME/dotfiles/nvim/.config/nvim/" "/mnt/c/Users/mdasa/AppData/Local/nvim/" 
 }
 
 eval "$(starship init bash)"
@@ -257,12 +264,12 @@ eval "$(starship init bash)"
 export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 export PATH="$PATH:~/coding/c-programming/peekaboo-my-ls"
 export PATH="$PATH:~/downloads/"
+export PATH="$PATH:~/.config/emacs/bin"
 
 export NODE_COMPILE_CACHE=~/.cache/nodejs-compile-cache
 
 set -o vi
 
-# PS1='\n\u@\h:\w\$ '
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
@@ -270,42 +277,12 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 export EDITOR=$(which nvim)
 
 
-if [ -f /usr/bin/fastfetch ]; then
-    fastfetch -c ~/dotfiles/neofetch.jsonc
-fi
+# if [ -f /usr/bin/fastfetch ]; then
+#     fastfetch -c ~/dotfiles/neofetch.jsonc
+# fi
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-
-# cmdmode() {
-#     if [[ -n "$CMD_MODE" ]]; then
-#         unset CMD_MODE
-#         echo "🔁 CMD mode OFF"
-#         return
-#     fi
-#     export CMD_MODE=1
-#     echo "💻 CMD mode ON"
-# }
-
-# trap '
-# if [[ -n "$CMD_MODE" ]]; then
-#     case "$BASH_COMMAND" in
-#         cmdmode* | trap* | starship_precmd* | eval\ *starship_precmd* )
-#             ;;
-#         *)
-#             # Run the command through CMD
-#             cmd.exe /C "$BASH_COMMAND"
-#             history -s "$BASH_COMMAND"
-#             # Skip bash execution by short-circuiting with a harmless builtin
-#             BASH_COMMAND=":"
-#            ;;
-#     esac
-# fi
-# ' DEBUG
-
-
-
-
-
+. "$HOME/.cargo/env"

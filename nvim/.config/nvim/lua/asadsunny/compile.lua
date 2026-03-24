@@ -112,7 +112,7 @@ M.executor = function(cmd, cwd)
     vim.api.nvim_win_set_height(M.compile_window, math.floor(vim.o.lines * 0.4))
 
     local actual_cwd = cwd or vim.fn.getcwd()
-    local cmd_table = { "sh", "-c", cmd }
+    local cmd_table = { "bash", "-c", cmd }
 
     if not cmd or cmd == "" then
         vim.notify("Error: 'cmd' is required.", vim.log.levels.ERROR)

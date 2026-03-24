@@ -9,14 +9,15 @@ return {
     dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
     -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
     lazy = false,
+    command = "Oil",
     config = function()
         require("oil").setup({
             watch_for_changes = true,
             columns = {
+                "permissions",
+                "mtime",
+                "size",
                 "icon",
-                -- "size",
-                -- "mtime",
-                -- "permissions",
             },
             -- keymaps = {
             -- 	["<C-p>"] = "actions.preview",

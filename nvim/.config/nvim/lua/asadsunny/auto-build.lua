@@ -26,6 +26,7 @@ local function run_build()
         vim.notify("Cannot run build: missing or invalid build_config.lua", vim.log.levels.ERROR)
         return
     end
+    --
 
     local build_cmd = config.build_cmd or "make"
     local run_cmd = config.run_cmd or ""
@@ -54,7 +55,7 @@ end
 
 vim.keymap.set(
     "n",
-    "<leader>c",
+    "<leader>r",
     run_build,
     { noremap = true, silent = true, desc = "Run project build/run using build_config.lua" }
 )
