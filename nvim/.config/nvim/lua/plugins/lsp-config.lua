@@ -177,11 +177,10 @@ return {
             --     -- capabilities = capabilities,
             -- })
             lspconfig.tailwindcss.setup({
-                -- cmd = {
-                --     "/home/asad/.local/share/nvim/mason/packages/tailwindcss-language-server/node_modules/@tailwindcss/language-server/bin/tailwindcss-language-server",
-                --     "--stdio",
-                -- },
-                -- capabilities = capabilities,
+                cmd = {
+                    "/home/asad/.local/share/nvim/mason/packages/tailwindcss-language-server/node_modules/.bin/tailwindcss-language-server",
+                    "--stdio",
+                },
             })
             -- astro --
             lspconfig["astro"].setup({

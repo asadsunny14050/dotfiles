@@ -55,7 +55,7 @@ end
 
 vim.keymap.set(
     "n",
-    "<leader>r",
+    "<leader>b",
     run_build,
     { noremap = true, silent = true, desc = "Run project build/run using build_config.lua" }
 )

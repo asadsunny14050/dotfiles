@@ -14,9 +14,9 @@ return {
         require("oil").setup({
             watch_for_changes = true,
             columns = {
-                "permissions",
-                "mtime",
-                "size",
+                -- "permissions",
+                -- "mtime",
+                -- "size",
                 "icon",
             },
             -- keymaps = {

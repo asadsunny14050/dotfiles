@@ -28,6 +28,14 @@ return {
                         hijack_netrw = true,
                         hidden = true,
                     },
+                    mappings = {
+                        n = {
+                            ["<leader><CR>"] = actions.select_vertical,
+                        },
+                        i = {
+                            ["<leader><CR>"] = actions.select_vertical,
+                        },
+                    },
                 },
             })
 
@@ -73,57 +81,6 @@ return {
                         local picker = action_state.get_current_picker(prompt_bufnr)
                         picker:reset_prompt(entry.path)
                     end
-                end
-
-                local function tab_autocomplete2()
-                    local entry = action_state.get_selected_entry()
-                    if not entry or not entry.path then
-                        return
-                    end
-
-                    local picker = action_state.get_current_picker(prompt_bufnr)
-                    if not picker then
-                        return
-                    end
-
-                    local current = action_state.get_current_line() or ""
-
-                    -- split current prompt by / and get all except last
-                    local parts = vim.split(current, "/", true)
-                    local prefix = table.concat(parts, "/", 1, #parts - 1)
-                    if prefix ~= "" then
-                        prefix = prefix .. "/" -- keep the preceding path
-                    end
-
-                    -- selected basename
-                    local name = vim.fn.fnamemodify(entry.path, ":t")
-
-                    -- reset prompt: keep path before last component, replace last component
-                    local new_prompt = prefix .. name
-                    picker:reset_prompt(new_prompt)
-
-                    -- local entry = action_state.get_selected_entry()
-                    -- if not entry or not entry.path then
-                    --     return
-                    -- end
-
-                    -- local picker = action_state.get_current_picker(prompt_bufnr)
-                    -- if vim.fn.isdirectory(entry.path) == 1 then
-                    --     -- actions.close(prompt_bufnr)
-                    --     -- telescope.extensions.file_browser.file_browser({
-                    --     --     path = entry.path,
-                    --     --     cwd = entry.path,
-                    --     --     hidden = true,
-                    --     --     respect_gitignore = false,
-                    --     --     prompt_title = entry.path,
-                    --     --     attach_mappings = attach_file_browser_mappings,
-                    --     -- })
-                    --     local str
-                    --     str = entry.path:gsub("/$", "")
-                    --     picker:reset_prompt(str)
-                    -- else
-                    --     picker:reset_prompt(entry.path)
-                    -- end
                 end
 
                 local map = function(mode, key, fn)

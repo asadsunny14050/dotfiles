@@ -25,15 +25,17 @@ return {
             -- the command (and behave more like `:!`), add:
             -- bang_expansion = true,
             --
-            default_command = ""
+            default_command = "",
+            ask_about_save = false,
+            ask_to_interrupt = false,
         }
         -- Keybindings
         local keymap = vim.keymap.set
 
         -- Invoke compile (opens prompt for command)
-        keymap('n', '<leader>c', '<cmd>Compile<cr>', { desc = 'Compile: Run' })
+        keymap("n", "<leader>c", "<cmd>Compile<cr>", { desc = "Compile: Run" })
 
         -- Re-run last compile command
-        keymap('n', '<leader>C', '<cmd>Recompile<cr>', { desc = 'Compile: Re-run last' })
+        keymap("n", "<leader>C", "<cmd>Recompile<cr><cr>", { desc = "Compile: Re-run last" })
     end,
 }
